@@ -1,0 +1,105 @@
+<div class="login-scope modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="d-flex flex-row p-5" id="login-card">
+                <div class="login100-pic js-tilt" data-tilt>
+                    <img src="../Utils/assets/images/img-01.png" alt="IMG">
+                </div>
+
+                <form class="login100-form" id="auth-form" method="POST">
+                    <!-- distingue login / signup -->
+                    <input type="hidden" name="mode" id="mode" value="login" />
+
+                    <span class="login100-form-title">Member Login</span>
+
+                    <!-- Email -->
+                    <div class="wrap-input100">
+                        <input class="input100" type="text" name="email" placeholder="Email" autocomplete="email">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="wrap-input100">
+                        <input class="input100" type="password" name="pass" placeholder="Password"
+                            autocomplete="current-password">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                    </div>
+
+
+
+                    <!-- CAMPI EXTRA REGISTRAZIONE -->
+                    <div id="signup-extra" class="d-none mt-3">
+                        <div class="row g-3">
+                            <!-- Nome -->
+                            <div class="col-12 col-md-6">
+                                <div class="wrap-input100">
+                                    <input class="input100" type="text" name="firstName" placeholder="First name"
+                                        autocomplete="given-name">
+                                    <span class="focus-input100"></span>
+                                    <span class="symbol-input100"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- Cognome -->
+                            <div class="col-12 col-md-6">
+                                <div class="wrap-input100">
+                                    <input class="input100" type="text" name="lastName" placeholder="Last name"
+                                        autocomplete="family-name">
+                                    <span class="focus-input100"></span>
+                                    <span class="symbol-input100"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- Data di nascita -->
+                            <div class="col-12 col-md-6">
+                                <div class="wrap-input100">
+                                    <input class="input100" type="date" name="birthDate" placeholder="Birthdate"
+                                        autocomplete="bday">
+                                    <span class="focus-input100"></span>
+                                    <span class="symbol-input100"><i class="fa fa-calendar"
+                                            aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- Metodo di pagamento -->
+                            <div class="col-12 col-md-6">
+                                <div class="wrap-input100">
+                                    <select class="input100" name="paymentMethod">
+                                        <option value="" disabled selected>Payment method</option>
+                                        <option value="carta">Carta</option>
+                                        <option value="bancomat">Bancomat</option>
+                                        <option value="paypal">PayPal</option>
+                                    </select>
+                                    <span class="focus-input100"></span>
+                                    <span class="symbol-input100"><i class="fa fa-credit-card"
+                                            aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- MESSAGGIO -->
+                    <span id="alert-message" class="mx-3 d-none"></span>
+
+                    <!-- BOTTONI -->
+                    <div class="container-login100-form-btn">
+                        <button id="submit-btn" class="login100-form-btn" type="submit">Login</button>
+                    </div>
+
+                    <!-- Link toggle -->
+                    <div class="text-center p-2">
+                        <a id="toggle-signup" class="txt2" href="#">
+                            <span class="toggle-text">Create your Account</span>
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>

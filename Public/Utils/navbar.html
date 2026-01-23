@@ -1,0 +1,47 @@
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top nav-underline" id="mainNav">
+  <div class="container px-4 px-lg-5">
+    <a class="navbar-brand" href="/">
+      <img src="../Utils/assets/images/nav-logo.png" alt="fastFood" class="brand-img">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Links a sinistra -->
+      <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0" id="nav-links">
+        <li class="nav-item"><a class="nav-link" aria-current="page" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" aria-current="page" href="/profile">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" aria-current="page" href="/orders">my orders</a></li>
+      </ul>
+
+      <!-- Pulsanti a destra -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item me-3" id="cart-button">
+          <a class="btn btn-outline-light" type="button" href="/cart">
+            <i class="bi-cart-fill me-1"></i>
+            Cart
+            <span class="badge bg-light text-dark ms-1 rounded-pill" id="cart-items">0</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown" id="login-area">
+          <button class="btn btn-outline-light d-flex align-items-center" type="button" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="" alt="Avatar" class="rounded-circle me-2" style="width:24px; height:24px; object-fit:cover;">
+            <p class="m-0"></p>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/profile">Settings</a></li>
+            <li><a class="dropdown-item" href="/orders">Your orders</a></li>
+            <li><a class="dropdown-item d-none" href="/dashboard" id="restaurantSet">Your restaurant</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" id="logout">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

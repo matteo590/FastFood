@@ -1,0 +1,89 @@
+.img-wrap {
+  cursor: pointer;
+  overflow: hidden;
+  border-top-left-radius: 0.5rem;  /* opzionale: match con .card */
+  border-top-right-radius: 0.5rem;
+}
+
+.img-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform .25s ease-in-out;
+}
+
+.img-wrap:hover img {
+  transform: scale(1.02);
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.25);
+  opacity: 0;
+  transition: opacity .2s ease-in-out;
+  pointer-events: none;
+}
+
+.info-icon {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  font-size: 1.25rem;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .2s ease-in-out, transform .2s ease-in-out;
+  pointer-events: none;
+}
+
+.img-wrap:hover .img-overlay,
+.img-wrap:hover .info-icon {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* la barra deve crescere da sinistra */
+.progress-bar {
+  transform-origin: left center;
+}
+
+/* animazione di riempimento con rimbalzo */
+@keyframes bounceFill {
+  0%   { transform: scaleX(0); }
+  60%  { transform: scaleX(1.03); }
+  75%  { transform: scaleX(0.98); }
+  90%  { transform: scaleX(1.01); }
+  100% { transform: scaleX(1); }
+}
+
+.progress-bar.animate-fill {
+  animation: bounceFill 1s cubic-bezier(0.215,0.610,0.355,1.000) both;
+}
+
+/* opzionale: evita che si veda qualcosa oltre i bordi durante l’anim */
+.progress { overflow: hidden; }
+
+
+.fade-out {
+  opacity: 1;
+  transition: opacity 1s ease; /* durata e tipo animazione */
+}
+
+.fade-out.hide {
+  opacity: 0;
+}
