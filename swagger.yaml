@@ -1,0 +1,858 @@
+openapi: 3.0.3
+info:
+  title: FastFood API
+  version: 1.0.0
+  description: >
+    OpenAPI (Swagger) specification for the FastFood backend (Express + MongoDB/Mongoose).
+    **Assunzioni**: i router sono montati così:
+      - /api/auth (loginRoute.js)
+      - /api/meals (mealsRoute.js)
+      - /api/orders (ordersRoute.js)
+      - /api/restaurants (restaurantsRoute.js)
+      - /api/users (usersRoute.js)
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local dev
+
+tags:
+  - name: Auth
+  - name: Meals
+  - name: Orders
+  - name: Restaurants
+  - name: Users
+
+paths:
+  /auth/signup:
+    post:
+      tags: [Auth]
+      summary: Sign up
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupInput'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation error
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+  /auth/{id}:
+    put:
+      tags: [Auth]
+      summary: Update user (profile)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateInput'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+  /meals:
+    post:
+      tags: [Meals]
+      summary: Create meal
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealInput'
+      responses:
+        '201':
+          description: Meal created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+  /meals/byRestaurant/{restaurantId}:
+    get:
+      tags: [Meals]
+      summary: Get meals by restaurant
+      parameters:
+        - in: path
+          name: restaurantId
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: List of meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+  /meals/{id}:
+    get:
+      tags: [Meals]
+      summary: Get meal by id
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: Meal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+        '404':
+          description: Not found
+    put:
+      tags: [Meals]
+      summary: Update meal
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MealInput'
+      responses:
+        '200':
+          description: Updated meal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+    delete:
+      tags: [Meals]
+      summary: Delete meal
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '204':
+          description: Deleted
+
+  /orders:
+    get:
+      tags: [Orders]
+      summary: Get all orders
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      tags: [Orders]
+      summary: Create order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateInput'
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /orders/by-user/{userId}:
+    get:
+      tags: [Orders]
+      summary: Get orders by user
+      parameters:
+        - in: path
+          name: userId
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: User orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Get order by id
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Not found
+    put:
+      tags: [Orders]
+      summary: Update order
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderUpdateInput'
+      responses:
+        '200':
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    delete:
+      tags: [Orders]
+      summary: Delete order
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '204':
+          description: Deleted
+
+  /restaurants:
+    get:
+      tags: [Restaurants]
+      summary: Get all restaurants
+      responses:
+        '200':
+          description: List of restaurants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurant'
+    post:
+      tags: [Restaurants]
+      summary: Create restaurant
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestaurantInput'
+      responses:
+        '201':
+          description: Restaurant created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+  /restaurants/{id}:
+    get:
+      tags: [Restaurants]
+      summary: Get restaurant by id
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: Restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+        '404':
+          description: Not found
+    put:
+      tags: [Restaurants]
+      summary: Update restaurant
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestaurantInput'
+      responses:
+        '200':
+          description: Updated restaurant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+    delete:
+      tags: [Restaurants]
+      summary: Delete restaurant
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '204':
+          description: Deleted
+  /restaurants/{id}/menu:
+    get:
+      tags: [Restaurants]
+      summary: Get restaurant menu
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      responses:
+        '200':
+          description: Menu items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuItem'
+    post:
+      tags: [Restaurants]
+      summary: Add menu item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemInput'
+      responses:
+        '201':
+          description: Menu item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+    put:
+      tags: [Restaurants]
+      summary: Update menu item (by body payload id)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemUpdateInput'
+      responses:
+        '200':
+          description: Updated menu item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+  /restaurants/{id}/menu/{ItemId}:
+    delete:
+      tags: [Restaurants]
+      summary: Delete menu item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema: { type: string }
+          required: true
+        - in: path
+          name: ItemId
+          schema: { type: string }
+          required: true
+      responses:
+        '204':
+          description: Deleted
+
+  /restaurants/{id}/orders:
+    get:
+      tags: [Restaurants]
+      summary: Get all orders for a restaurant
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      tags: [Restaurants]
+      summary: Create order for a restaurant
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateInput'
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /restaurants/{id}/orders/{orderId}:
+    get:
+      tags: [Restaurants]
+      summary: Get order by id for a restaurant
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+        - in: path
+          name: orderId
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    put:
+      tags: [Restaurants]
+      summary: Update order for a restaurant
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+        - in: path
+          name: orderId
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderUpdateInput'
+      responses:
+        '200':
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    delete:
+      tags: [Restaurants]
+      summary: Delete order for a restaurant
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+        - in: path
+          name: orderId
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Deleted
+
+  /users:
+    get:
+      tags: [Users]
+      summary: Get all users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      tags: [Users]
+      summary: Get user by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+    delete:
+      tags: [Users]
+      summary: Delete user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Deleted
+  /users/{id}/setRole/{role}:
+    put:
+      tags: [Users]
+      summary: Set user role
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+        - in: path
+          name: role
+          required: true
+          schema:
+            type: string
+            enum: [ristoratore, cliente, admin]
+      responses:
+        '200':
+          description: Updated user with new role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # AUTH
+    SignupInput:
+      type: object
+      required: [firstname, lastname, email, pass, userType]
+      properties:
+        firstname: { type: string }
+        lastname: { type: string }
+        birthday: { type: string, format: date }
+        paymentMethod:
+          type: string
+          enum: [carta, bancomat, paypal]
+        email:
+          type: string
+          format: email
+        userType:
+          type: string
+          enum: [ristoratore, cliente]
+        pass:
+          type: string
+          description: Plain password (server will hash it)
+      example:
+        firstname: Mario
+        lastname: Rossi
+        birthday: 2000-05-20
+        paymentMethod: carta
+        email: mario.rossi@example.com
+        userType: cliente
+        pass: mySecretPass123!
+    LoginInput:
+      type: object
+      required: [email, pass]
+      properties:
+        email: { type: string, format: email }
+        pass: { type: string }
+
+    # USERS
+    User:
+      type: object
+      properties:
+        _id: { type: string }
+        firstname: { type: string }
+        lastname: { type: string }
+        birthday: { type: string, format: date }
+        paymentMethod:
+          type: string
+          enum: [carta, bancomat, paypal]
+        email: { type: string, format: email }
+        userType:
+          type: string
+          enum: [ristoratore, cliente, admin]
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      example:
+        _id: 681c717ea327223432641b28
+        firstname: Mario
+        lastname: Rossi
+        email: mario.rossi@example.com
+        userType: cliente
+    UserUpdateInput:
+      type: object
+      properties:
+        firstname: { type: string }
+        lastname: { type: string }
+        birthday: { type: string, format: date }
+        paymentMethod:
+          type: string
+          enum: [carta, bancomat, paypal]
+
+    # MEALS
+    Meal:
+      type: object
+      properties:
+        _id: { type: string }
+        strMeal: { type: string }
+        strCategory: { type: string }
+        strArea: { type: string }
+        strInstructions: { type: string }
+        strMealThumb: { type: string, format: uri }
+        ingredients:
+          type: array
+          items: { type: string }
+      example:
+        _id: 52768
+        strMeal: Apple Frangipan Tart
+        strCategory: Dessert
+        strMealThumb: https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg
+        ingredients: [Apple, Sugar, Butter, Eggs]
+    MealInput:
+      type: object
+      required: [strMeal]
+      properties:
+        strMeal: { type: string }
+        strCategory: { type: string }
+        strArea: { type: string }
+        strInstructions: { type: string }
+        strMealThumb: { type: string, format: uri }
+        ingredients:
+          type: array
+          items: { type: string }
+
+    # RESTAURANTS & MENU
+    Restaurant:
+      type: object
+      properties:
+        _id: { type: string }
+        name: { type: string }
+        category: { type: string }
+        address: { type: string }
+        menu:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItem'
+      example:
+        _id: 681c717ea327223432641b28
+        name: La Trattoria
+        category: Italian
+        address: Via Roma 10, Milano
+    RestaurantInput:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        category: { type: string }
+        address: { type: string }
+
+    MenuItem:
+      type: object
+      properties:
+        _id: { type: string }
+        meal:
+          $ref: '#/components/schemas/Meal'
+        price:
+          type: number
+          format: float
+        visible:
+          type: boolean
+      example:
+        _id: 701c717ea327223432641b77
+        price: 8.50
+        visible: true
+        meal:
+          _id: 52768
+          strMeal: Apple Frangipan Tart
+          strCategory: Dessert
+    MenuItemInput:
+      type: object
+      required: [mealId, price]
+      properties:
+        mealId: { type: string }
+        price: { type: number, format: float }
+        visible: { type: boolean }
+    MenuItemUpdateInput:
+      type: object
+      properties:
+        ItemId: { type: string, description: "ID della voce menu da aggiornare (se richiesto dal controller)" }
+        price: { type: number, format: float }
+        visible: { type: boolean }
+
+    # ORDERS
+    Order:
+      type: object
+      properties:
+        _id: { type: string }
+        userId: { type: string }
+        restaurantId: { type: string }
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        status:
+          type: string
+          enum: [pending, confirmed, preparing, delivered, cancelled]
+        totalPrice:
+          type: number
+          format: float
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      example:
+        _id: 77aa11bb22cc33dd44ee55ff
+        userId: 681c717ea327223432641b28
+        restaurantId: 681c717ea327223432641b28
+        items:
+          - mealId: 52768
+            quantity: 2
+            price: 8.5
+        status: pending
+        totalPrice: 17.0
+    OrderItem:
+      type: object
+      properties:
+        mealId: { type: string }
+        quantity: { type: integer, minimum: 1 }
+        price: { type: number, format: float }
+    OrderCreateInput:
+      type: object
+      required: [restaurantId, items]
+      properties:
+        restaurantId: { type: string }
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        note: { type: string }
+    OrderUpdateInput:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, confirmed, preparing, delivered, cancelled]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        note: { type: string }
